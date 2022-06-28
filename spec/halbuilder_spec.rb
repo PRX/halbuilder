@@ -5,7 +5,11 @@ RSpec.describe Halbuilder do
     expect(Halbuilder::VERSION).not_to be nil
   end
 
-  it "does something useful" do
-    expect(false).to eq(true)
+  it "configures things" do
+    Halbuilder.configure do |config|
+      config.something = "foo"
+    end
+
+    expect(Halbuilder.configuration.something).to eq("foo")
   end
 end
