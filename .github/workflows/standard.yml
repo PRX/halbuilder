@@ -1,4 +1,4 @@
-name: RSpec
+name: Standard
 on:
   push:
     branches: ['main']
