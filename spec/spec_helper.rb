@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "halbuilder"
 require "pry"
+require "halbuilder"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
