@@ -3,7 +3,8 @@
 [![license](https://img.shields.io/github/license/PRX/halbuilder.svg)](LICENSE)
 [![Gem](https://img.shields.io/gem/v/halbuilder)](https://rubygems.org/gems/halbuilder)
 [![Gem](https://img.shields.io/gem/dt/halbuilder)](https://rubygems.org/gems/halbuilder)
-![Ruby CI](https://github.com/PRX/halbuilder/workflows/Ruby%20CI/badge.svg)
+![RSpec](https://github.com/PRX/halbuilder/workflows/RSpec/badge.svg)
+![Standard](https://github.com/PRX/halbuilder/workflows/Standard/badge.svg)
 
 [Hypertext Application Language](https://en.wikipedia.org/wiki/Hypertext_Application_Language) (HAL)
 specific extensions for [Jbuilder](https://github.com/rails/jbuilder).
