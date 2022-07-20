@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 RSpec.describe Halbuilder do
-  it "has a version number" do
-    expect(Halbuilder::VERSION).not_to be nil
+  it "configures" do
+    Halbuilder.configure { |config| config.link_namespace = "foo" }
+    expect(Halbuilder.configuration.link_namespace).to eq("foo")
   end
 
-  it "configures things" do
-    Halbuilder.configure do |config|
-      config.something = "foo"
-    end
-
-    expect(Halbuilder.configuration.something).to eq("foo")
+  it "includes jbuilder extensions" do
+    json = Jbuilder.new
+    json.hal_link! "foo:bar", "/api/v1/foo/bar"
+    expect(json.target!).to eq('{"_links":{"foo:bar":{"href":"/api/v1/foo/bar"}}}')
   end
 end
