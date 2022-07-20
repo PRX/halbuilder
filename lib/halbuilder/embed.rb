@@ -24,7 +24,7 @@ module Halbuilder::Embed
           collection = collection.call if collection.is_a?(Proc)
 
           # iterate block, or render explicit nulls
-          if collection.respond_to?(:each)
+          if collection.respond_to?(:each) && !collection.is_a?(Hash)
             array! collection do |c|
               block.call(c)
             end

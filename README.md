@@ -92,20 +92,155 @@ end
 ### Embeds
 
 One convention for speeding up HAL APIs is to embed linked resources into the same documents.
+For this, we use the `_embedded` top level key, followed by the same `rel` as the link, and
+the object or array of objects (or null) you would get back had you followed the link.
+
+```ruby
+json.hal_embed! "hello:one" do
+  json.id 1234
+  json.title "Some Resource"
+end
+
+json.hal_embed! "hello:two", 1..3 do |num|
+  json.id num
+  json.title "Thing #{num}"
+end
+```
+
+```json
+{
+  "_embedded": {
+    "hello:one": {
+      "id": 1234,
+      "title": "Some Resource"
+    },
+    "hello:two": [
+      {
+        "id": 1,
+        "title": "Thing 1"
+      },
+      {
+        "id": 2,
+        "title": "Thing 2"
+      },
+      {
+        "id": 3,
+        "title": "Thing 3"
+      }
+    ]
+  }
+}
+```
+
+Note that after the name of the `rel`, you can optionally pass a collection to iterate
+over. You can also pass a lambda, just-in-time returning either an object or collection
+to render:
+
+```ruby
+json.hal_embed! "hello:one", -> { {id: 1234, title: "Some Resource"} } do |obj|
+  json.id obj[:id]
+  json.title obj[:title]
+end
+
+json.hal_embed! "hello:two", -> { 1..3 } do |num|
+  json.id num
+  json.title "Thing #{num}"
+end
+```
+
+This works in conjunction with the `?zoom=` query parameter. By passing `zoom: true` to
+a `hal_embed!` we indicate that by default, we want to render this collection. Or passing
+`zoom: false` indicates not to render it.
+
+```ruby
+# GET /api/v1/resource
+
+json.hal_embed! "hello:one", zoom: false do
+  title "This will not render"
+end
+
+json.hal_embed! "hello:two", zoom: true do
+  title "This WILL render"
+end
+```
+
+Passing `?zoom=1` or `?zoom=0` will result in _ALL_ `hal_embed!`s in the view being
+rendered or not rendered, regardless of their defaults.
+
+Passing `?zoom=hello:one,hello:two` will result in just those 2 rels being rendered,
+but any other `hal_embed!` with a `zoom:` will not be. This can be used in conjunction
+with lambdas/blocks to only load data needed for the requested zoom level:
+
+```ruby
+# GET /api/v1/resource?zoom=hello:one,hello:two
+
+json.hal_embed! "hello:one", zoom: false do
+  # this code will run and render
+  title some_expensive_db.get_title
+end
+
+json.hal_embed! "hello:two", -> { some_expensive_db.fetch_two }, zoom: true do |thing|
+  # this code will also run and render
+  title thing.title
+end
+
+json.hal_embed! "hello:three", -> { some_expensive_db.fetch_three }, zoom: true do |thing|
+  # this code will NOT run the expensive db operation, OR render
+  title thing.title
+end
+
+json.hal_embed! "hello:four", zoom: true do
+  # this code will not run or render
+  title some_expensive_db.get_title
+end
+```
 
 ### Pagination
 
+It's often useful to parse query params and render `_links` to different collection pages,
+using the gem [Kaminari](https://github.com/kaminari/kaminari). After paging the collection in
+your controller, just call `hal_paginate!` on it:
 
+```ruby
+# GET /api/v1/things?foo=bar&page=3
+
+json.hal_paginate! @things
+```
+
+```json
+{
+  "count": 10,
+  "total": 999,
+  "_links": {
+    "first": {
+      "href": "/api/v1/accounts?foo=bar"
+    },
+    "prev": {
+      "href": "/api/v1/accounts?foo=bar&page=2"
+    },
+    "next": {
+      "href": "/api/v1/accounts?foo=bar&page=4"
+    },
+    "last": {
+      "href": "/api/v1/accounts?foo=bar&page=100"
+    }
+  }
+}
+```
 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
+Before commiting any code, run `rake standardrb` and/or `rake standardrb --fix` to make sure your changes are compliant with the [Standard](https://github.com/testdouble/standard) style guide.
+
+When you're ready to push changes, open a pull request against the `main branch` of the repo.
+
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/cavis/halbuilder. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/cavis/halbuilder/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/PRX/halbuilder. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/PRX/halbuilder/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -113,4 +248,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Halbuilder project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/cavis/halbuilder/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Halbuilder project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/PRX/halbuilder/blob/master/CODE_OF_CONDUCT.md).
