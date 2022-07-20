@@ -18,3 +18,11 @@ RSpec.configure do |config|
     Halbuilder.reset!
   end
 end
+
+# cannot use JbuilderTemplate directly - so fake the @context
+class Fakebuilder < Jbuilder
+  def initialize(context)
+    @context = context
+    super({})
+  end
+end

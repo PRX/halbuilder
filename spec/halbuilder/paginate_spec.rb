@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-# cannot use JbuilderTemplate directly - so fake the @context
-class Fakebuilder < Jbuilder
-  def initialize(context)
-    @context = context
-    super({})
-  end
-end
-
 RSpec.describe Halbuilder::Paginate do
   let(:request) { double("the request", path: "/123/foo", query_parameters: {}) }
   let(:context) { double("the context", request: request) }
