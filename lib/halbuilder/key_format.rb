@@ -4,6 +4,7 @@ module Halbuilder::KeyFormat
   class << self
     def setup
       ::Jbuilder.deep_format_keys(true)
+      ::Jbuilder.ignore_nil(true)
 
       ::Jbuilder.key_format ->(key) do
         key_format = Halbuilder.configuration.key_format

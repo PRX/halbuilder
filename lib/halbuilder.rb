@@ -3,6 +3,7 @@
 require "jbuilder"
 require_relative "halbuilder/configuration"
 require_relative "halbuilder/embed"
+require_relative "halbuilder/helper"
 require_relative "halbuilder/key_format"
 require_relative "halbuilder/link"
 require_relative "halbuilder/paginate"
@@ -37,3 +38,11 @@ Jbuilder.include Halbuilder::Embed
 Jbuilder.include Halbuilder::Link
 Jbuilder.include Halbuilder::Paginate
 Jbuilder.include Halbuilder::Zoom
+
+# optional rails helpers
+if Module.const_defined?(:ActionView)
+  ActionView::Base.include(Halbuilder::Helper)
+end
+if Module.const_defined?(:ActionController)
+  ActionController::Base.include(Halbuilder::Helper)
+end

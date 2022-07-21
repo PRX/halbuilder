@@ -4,7 +4,7 @@ module Halbuilder::Zoom
   TRUTHY = [true, "true", "TRUE", 1, "1"]
   FALSEY = [false, "false", "FALSE", 0, "0"]
 
-  def hal_zoomed?(rel, default_setting)
+  def hal_zoomed?(rel, default_setting = false)
     if default_setting.nil?
       true
     elsif zoom_param.nil?
