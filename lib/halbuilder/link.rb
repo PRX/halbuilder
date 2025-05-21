@@ -12,7 +12,7 @@ module Halbuilder::Link
           href val
         end
       else
-        raise Halbuilder::Error.new("Invalid hal link: #{href.inspect}")
+        ::Kernel.raise Halbuilder::Error.new("Invalid hal link: #{href.inspect}")
       end
     end
   end

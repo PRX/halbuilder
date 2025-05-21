@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "activesupport", ">= 6.0.0"
   spec.add_dependency "jbuilder", ">= 2.0.0"
   spec.add_dependency "kaminari", ">= 1.0.0"
 end

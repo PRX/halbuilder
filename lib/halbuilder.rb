@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "jbuilder"
+require "active_support/core_ext"
 require_relative "halbuilder/configuration"
 require_relative "halbuilder/embed"
 require_relative "halbuilder/helper"

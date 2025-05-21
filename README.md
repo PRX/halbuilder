@@ -231,9 +231,9 @@ json.hal_paginate! @things
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-Before commiting any code, run `rake standardrb` and/or `rake standardrb --fix` to make sure your changes are compliant with the [Standard](https://github.com/testdouble/standard) style guide.
+Before commiting any code, run `bundle exec standardrb` and/or `bundle exec standardrb --fix` to make sure your changes are compliant with the [Standard](https://github.com/testdouble/standard) style guide.
 
 When you're ready to push changes, open a pull request against the `main branch` of the repo.
 
